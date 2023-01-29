@@ -75,20 +75,20 @@ export function HomeScreen() {
         {/* 
         <Image
           source={{
-            uri: urlFor(posts[0]?.author?.image?.asset).auto('format').toString()
+            uri: urlFor(posts[0]?.author?.image?.asset)?.auto('format').toString()
           }}
           alt="author image"
           className="h-24 w-24 rounded-full"
         /> */}
         <H4>{JSON.stringify(posts[0])}</H4>
-        <Image
+        {/* <Image
           resizeMode='contain'
           source={{
-            uri: urlFor(posts[0]?.mainImage?.asset).auto('format').toString()
+            uri: urlFor(posts[0]?.mainImage?.asset)?.auto('format').toString()
           }}
           alt="author image"
           className="flex h-[300px] w-[400px]  "
-        />
+        /> */}
       </ScrollView>
     </View>
   )

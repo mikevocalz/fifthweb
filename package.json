@@ -15,6 +15,7 @@
     "typescript": "^4.9.4"
   },
   "scripts": {
+    "sanity": "cd apps/fifthgal && npx sanity dev",
     "native": "cd apps/expo && npx expo start --clear",
     "web": "cd apps/next && yarn next"
   },
