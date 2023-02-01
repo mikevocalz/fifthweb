@@ -1,5 +1,6 @@
 {
   "name": "solito-with-tailwind",
+  "license": "MIT",
   "private": true,
   "workspaces": [
     "apps/*",
@@ -16,7 +17,7 @@
   },
   "scripts": {
     "sanity": "cd apps/fifthgal && npx sanity dev",
-    "native": "cd apps/expo && npx expo start --clear",
+    "native": "cd apps/expo && expo start",
     "web": "cd apps/next && yarn next"
   },
   "resolutions": {

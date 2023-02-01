@@ -18,6 +18,7 @@ const withTM = require('next-transpile-modules')([
   '@expo/html-elements',
   'react-native-webview',
   '@sanity/image-url',
+  'expo-linear-gradient',
 ])
 
 /** @type {import('next').NextConfig} */

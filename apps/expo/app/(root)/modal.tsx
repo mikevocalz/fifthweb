@@ -1,41 +1,50 @@
-import { StatusBar } from "expo-status-bar";
-import { Platform, StyleSheet } from "react-native";
-
-import EditScreenInfo from "../../components/EditScreenInfo";
-import { Text, View } from "../../components/Themed";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState, useMemo } from 'react'
+import { H1, P, Text, TextLink } from 'app/design/typography'
+import { H4, H5, Row, Image, ScrollView, Div, A, H3, Section, Article } from 'app/design/layout'
+import { View } from 'app/design/view'
+import { MotiLink } from 'solito/moti'
+import { Dimensions, Platform } from 'react-native'
+import sanityClient from '../../sanity'
+import { urlFor } from '../../sanity'
+import axios from 'axios';
+import { Skeleton } from 'moti/skeleton'
+import { MotiPressable } from 'moti/interactions'
+import { MotiView } from 'moti'
 
 export default function ModalScreen() {
+  const screenHeight = Dimensions.get('window').height
+  const screenWidth = Dimensions.get('window').width
+
   return (
     <>
-      <View style={styles.container}>
-        <Text style={styles.title}>Modal</Text>
-        <View
-          style={styles.separator}
-          lightColor="#eee"
-          darkColor="rgba(255,255,255,0.1)"
-        />
-        <EditScreenInfo path="app/modal.tsx" />
+      <View className="bg-zinc-900 "
+        style={{
+          width: '100%',
+          height: '100%',
+          maxHeight: screenHeight,
+        }}>
 
-        {/* Use a light status bar on iOS to account for the black space above the modal */}
-        <StatusBar style={Platform.OS === "ios" ? "light" : "auto"} />
+        <ScrollView
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+          //contentInsetAdjustmentBehavior='automatic'
+          scrollEventThrottle={16}
+          contentContainerStyle={{
+            //overflow: 'hidden',
+            flexGrow: 1,
+            position: 'relative',
+            paddingBottom: 100,
+            alignItems: 'center',
+            //paddingHorizontal: 10
+          }}
+          className="container p-3 self-center text-white bg-zinc-900 max-w-7xl "
+        >
+
+          <H1 className="text-white text-center">Home</H1>
+        </ScrollView>
       </View>
     </>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
-  },
-});

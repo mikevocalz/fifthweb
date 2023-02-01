@@ -6,7 +6,7 @@ import { MotiLink } from 'solito/moti'
 import { View } from '../../design/view';
 import { SolitoImage } from 'solito/image';
 import Logo from './../../../../apps/expo/assets/images/fifth-logo.svg';
-import FooterComponent from '../../../../apps/next/Footer';
+import FooterComponent from '../../../../packages/app/components/FooterComponent';
 
 import { MaterialIcons } from '@expo/vector-icons';
 import { Text } from 'app/design/typography'
@@ -134,8 +134,9 @@ export function WebLayout({ children }: { children: ReactNode }) {
           {children}
 
 
-          <FooterComponent />
+
         </View>
+        <FooterComponent />
       </StacksProvider>
     </>
   )
