@@ -1,25 +1,34 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState, useMemo } from 'react'
-import { H1, P, Text, TextLink } from 'app/design/typography'
-import { H4, H5, Row, Image, ScrollView, Div, A, H3, Section, Article, FlatList } from 'app/design/layout'
+import { useEffect, useState } from 'react'
+import { H1, Text, TextLink } from 'app/design/typography'
+import { Article, FlatList } from 'app/design/layout'
 import { View } from 'app/design/view'
-import { MotiLink } from 'solito/moti'
 import { Dimensions, Platform } from 'react-native'
 import sanityClient from '../../sanity'
 import { urlFor } from '../../sanity'
-import axios from 'axios';
+
 import { Skeleton } from 'moti/skeleton'
 import { MotiPressable } from 'moti/interactions'
 import { MotiView } from 'moti'
 import CustomLoader from '../../components/CustomLoader';
 import { BlogItem } from 'app/components/BlogItem'
+import { useRouter } from 'solito/router'
+import usePostStore from '../../store/store';
+import { Post } from '../../../../apps/expo/types'
+
 
 const query = `
 *[_type == "post"]{
-  ...,
+...,
    title,
-        slug,
-  author->,
+     body,
+  slug,
+     description,
+     mainImage,
+  author->{
+    name,
+    image
+  },
     categories[]->
 } | order(_createdAt desc)
 `
@@ -28,68 +37,107 @@ const Spacer = ({ height = 16, width }) => <MotiView style={{ height, width }} /
 
 const isWeb = Platform.OS === "web"
 
-export function HomeScreen() {
+export function HomeScreen({ navigation }) {
+
+  const { push } = useRouter()
+
   const screenHeight = Dimensions.get('window').height
   const screenWidth = Dimensions.get('window').width
 
-  const [posts, setPosts] = useState([])
+  const [loading, setLoading] = useState(true)
+  //const [posts, setPosts] = useState(null)
   const [error, setError] = useState('')
 
-  function getPosts() {
-    sanityClient
-      .fetch(query)
-      .then((data) => {
-        setPosts(data);
-      })
-      .catch((err) => {
-        setError(err)
-      })
-  }
+  // const getPosts = () => {
+  //   sanityClient
+  //     .fetch(query)
+  //     .then((data) => {
+  //       setPosts(data)
+  //     })
+  //     .catch((err) => {
+  //       setError(err)
+  //     })
+  // }
 
   useEffect(() => {
-    getPosts()
+    //getPosts()
+    fetch()
+    setLoading(false)
   }, []);
+
+  const { posts, fetch } = usePostStore((state) => state)
 
   console.log('im posts:', posts)
 
+  // item.posts[0]?.body[0]?.children[0]?.text
 
+  const goToPostDetails = (item) => {
+    const slug = item.slug.current
+    //console.log('im item:', slug)
+    const body = item.body[0]?.children[0]?.text
+    // const auImg = urlFor(item.author?.image?.asset)?.auto('format').toString();
+    //const imgMain = urlFor(item.mainImage?.asset)?.auto('format').toString();
+    push({
+      pathname: `/user/${slug}`,
+      query: {
+        ...item,
+        id: item.title,
+        author: item.author?.name,
+        authorImgSrc: urlFor(item.author?.image?.asset)?.auto('format').toString(),
+        categories: item.categories,
+        item: item,
+        title: item.title,
+        body: item.body[0]?.children[0]?.text,
+        date: item._createdAt,
+        imgSrc: urlFor(item.mainImage?.asset)?.auto('format').toString()
+      }
+    })
+  }
   const renderItem = ({ item }) => (
-    <BlogItem
-      title={item.title}
-      authorImgSrc={item.author?.image?.asset}
-      description={item.posts[0]?.body[0]?.children[0]?.text}
-      date={item._createdAt}
-      imgSrc={item.mainImage?.asset}
-      categories={item.categories}
-    />
+    <>
+      {
+        loading && !posts ? <CustomLoader /> :
+          <BlogItem
+            onPress={() => goToPostDetails(item)}
+            title={item.title}
+            authorImgSrc={item.author?.image?.asset}
+            body={item.body[0]?.children[0]?.text}
+            date={item._createdAt}
+            imgSrc={item.mainImage?.asset}
+            categories={item.categories}
+          />
+      }</>
   )
 
   return (
-    <View className="bg-zinc-900 "
+    <View className="bg-zinc-900 flex-1"
       style={{
         width: '100%',
         height: '100%',
         maxHeight: screenHeight,
-        justifyContent: 'center'
       }}>
       {error ?
         <H1 className="text-white text-center">{error}</H1> :
-
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={posts}
-          renderItem={(item) => renderItem(item)}
-          keyExtractor={(item, index) => item._id.toString()}
-          ItemSeparatorComponent={() => <View className='h-[16px] bg-red-400' />}
-          contentContainerStyle={{
-            flexGrow: 1,
-            position: 'relative',
-            paddingTop: 100,
-            paddingBottom: 100,
-            alignItems: 'center',
-          }}
-          className="container p-4 self-center text-white bg-zinc-900 max-w-7xl "
-        />
+        <Article>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={posts}
+            renderItem={(item) => renderItem(item)}
+            keyExtractor={({ item }, i) => i.toString()}
+            ItemSeparatorComponent={() => <View className='h-10' />}
+            maxToRenderPerBatch={Math.ceil(screenHeight / 140)}
+            initialNumToRender={Math.ceil(screenHeight / 140)}
+            contentContainerStyle={{
+              flexGrow: 1,
+              position: 'relative',
+              paddingTop: isWeb ? 100 : 20,
+              paddingBottom: 100,
+              alignItems: 'center',
+            }}
+            className="container p-4 self-center text-white bg-zinc-900 max-w-7xl "
+            extraData={posts}
+          />
+        </Article>
 
       }
     </View>

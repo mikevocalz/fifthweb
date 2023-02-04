@@ -23,10 +23,10 @@ export default function CustomLoader(): JSX.Element {
           type: 'timing',
         }}
         style={{
-          flex: 1,
+          flexGrow: 1,
           alignItems: 'flex-start',
           flexDirection: isWeb ? 'row' : 'column',
-          width: '100%',
+          width: '100vw',
           maxWidth: 800,
           maxHeight: isWeb ? 210 : 300,
           padding: 16,

@@ -19,6 +19,7 @@ const withTM = require('next-transpile-modules')([
   'react-native-webview',
   '@sanity/image-url',
   'expo-linear-gradient',
+  '@portabletext/react-native',
 ])
 
 /** @type {import('next').NextConfig} */

@@ -1,5 +1,15 @@
 import { UserDetailScreen } from 'app/features/user/detail-screen'
+import { Link, Stack, } from "expo-router";
 
-export default function UserDetail() {
-  return <UserDetailScreen />
+interface Props {
+  navigation: (val: string) => void;
+  route: string | string[];
+}
+
+export default function UserDetail({ navigation, route }: Props) {
+  return (
+    <>
+      <UserDetailScreen navigation={navigation} route={route} />
+    </>
+  )
 }

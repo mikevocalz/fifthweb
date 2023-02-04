@@ -1,7 +1,6 @@
 import { Link, Tabs } from "expo-router";
 import { Pressable, useColorScheme } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import Tabbar from "@mindinventory/react-native-tab-bar-interaction";
 import { useNavigation } from '@react-navigation/native';
 
 
@@ -75,7 +74,7 @@ export default function TabLayout() {
     >
       <Tabs.Screen
         name="index"
-        options={({ navigation }): any => ({
+        options={({ navigation, route }): any => ({
           title: "Tab One",
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
           headerRight: () => (

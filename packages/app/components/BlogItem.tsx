@@ -15,22 +15,26 @@ interface BlogItemProps {
   imgSrc: string;
   authorImgSrc?: string;
   title: string;
-  descritption: string | string[]
+  body: string | string[];
   date: string;
-  categories: string | string[]
+  categories: string | string[];
+  onPress: (value: string) => void;
 }
 
-export const BlogItem = ({ title, imgSrc, description, date, authorImgSrc, categories }) => {
+const isWeb = Platform.OS === "web"
+
+export const BlogItem = ({ title, imgSrc, body, date, authorImgSrc, categories, onPress }) => {
   const screenHeight = Dimensions.get('window').height
   const screenWidth = Dimensions.get('window').width
+
 
   return (
     <>
       <MotiPressable
-        onPress={() => null}
+        onPress={onPress}
         style={{
-          flexGrow: 1,
-          width: '96%',
+
+          width: isWeb ? '90%' : screenWidth - 20,
           alignSelf: 'center',
         }}
         animate={useMemo(
@@ -46,7 +50,7 @@ export const BlogItem = ({ title, imgSrc, description, date, authorImgSrc, categ
           []
         )}
       >
-        <View className=" flex overflow-hidden flex-col items-center bg-black border border-black rounded-xl shadow md:flex-row md:w-[100%]  ">
+        <View className=" flex max-w-5xl overflow-hidden flex-col items-center bg-black border border-black rounded-xl shadow md:flex-row md:w-[100%]  ">
           <Image
             className="flex-1 object-cover object-left aspect-video	 w-[100%]   h-full md:h-[100%] md:w-48 lg:object-center "
             source={
@@ -61,7 +65,7 @@ export const BlogItem = ({ title, imgSrc, description, date, authorImgSrc, categ
 
             <Text numberOfLines={1} className="mt-2 mb-2 text-white text-lg md:text-md font-bold tracking-tight ">{title}</Text>
             <Text numberOfLines={4} style={{ flexWrap: 'wrap', }}
-              className="mb-2 font-regular text-[16px] text-gray-200">{description}</Text>
+              className="mb-2 font-regular text-[16px] text-gray-200">{body}</Text>
             <Row className='flex-row justify-between my-5 items-center'>
               <Text className="mb-2 font-light text-gray-400 text-[16px]">{new Date(date).toLocaleDateString(
                 "en-US", {
@@ -71,9 +75,14 @@ export const BlogItem = ({ title, imgSrc, description, date, authorImgSrc, categ
               }
               )}
               </Text>
-              <View className='bg-white rounded-3xl   justify-center mr-4'>
-                <Text className='py-[8px] px-6 text-sm font-bold text-gray-900 text-center'>Read More</Text>
-              </View>
+              <Row className='space-x-2 items-center'>
+                {categories.map((category, i) => (
+                  <View key={i} className='bg-white rounded-3xl  justify-center mr-'>
+                    <Text className='py-1 px-4 text-sm font-bold text-gray-900 text-center'>{category.title}</Text>
+                  </View>
+                ))}
+              </Row>
+
             </Row>
             <Row className='flex-row justify-between items-center'>
               <View className=' z-10 h-10 w-10 '>
@@ -81,18 +90,16 @@ export const BlogItem = ({ title, imgSrc, description, date, authorImgSrc, categ
                   className="flex-1 object-cover object-left h-10 w-10 rounded-lg "
                   source={
                     {
-                      uri: urlFor(authorImgSrc)?.auto('format').toString()
+                      uri: authorImgSrc
                     }
                   }
 
                   alt="blog image" />
               </View>
-
-              {categories.map((category, i) => (
-                <View key={i} className='bg-white rounded-3xl  justify-center mr-4'>
-                  <Text className='py-1 px-4 text-sm font-bold text-gray-900 text-center'>{category.title}</Text>
-                </View>
-              ))}</Row>
+              <View className='bg-white rounded-3xl   justify-center '>
+                <Text className='py-[8px] px-6 text-sm font-bold text-gray-900 text-center'>Read More</Text>
+              </View>
+            </Row>
           </View>
         </View>
       </MotiPressable>

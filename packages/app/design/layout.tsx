@@ -5,12 +5,13 @@ import {
 } from 'react-native'
 import {
   Div as RNDiv, A as ARNA, Footer as RNFooter, H5 as RNH5, H4 as RNH4,
-  H3 as RNH3, H2 as RNH2, I as RNI, LI as RNLI, UL as RNUL,
-  Span as RNSpan, HR as RNHR, Section as RNSection, Article as RNArticle
+  H3 as RNH3, H2 as RNH2, H1 as RNH1, I as RNI, LI as RNLI, UL as RNUL,
+  Span as RNSpan, HR as RNHR, Section as RNSection, Article as RNArticle, BlockQuote as RNBlockQuote
 } from '@expo/html-elements';
 import { MotiPressable as RNMotiPressable } from 'moti/interactions';
+import { TextLink as RNLink } from 'solito/link';
 
-
+export const Link = styled(RNLink)
 export const Row = styled(View, "flex-row")
 export const MotiPressable = styled(RNMotiPressable)
 export const ScrollView = styled(NativeScroll)
@@ -22,6 +23,8 @@ export const H5 = styled(RNH5)
 export const H4 = styled(RNH4)
 export const H3 = styled(RNH3)
 export const H2 = styled(RNH2)
+export const H1 = styled(RNH1)
+export const BlockQuote = styled(RNBlockQuote)
 export const I = styled(RNI)
 export const LI = styled(RNLI)
 export const UL = styled(RNUL)
