@@ -6,10 +6,10 @@ interface Props {
   route: string | string[];
 }
 
-export default function UserDetail({ navigation, route }: Props) {
+export default function UserDetail() {
   return (
-    <>
-      <UserDetailScreen navigation={navigation} route={route} />
-    </>
+
+    <UserDetailScreen />
+
   )
 }

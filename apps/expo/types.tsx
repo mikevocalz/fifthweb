@@ -31,14 +31,14 @@ export type RootTabParamList = {
 };
 
 export interface Post {
-  id: string;
+  _id: string;
   author?: {
     name: string;
     image: string;
   };
   title?: string;
   slug: string;
-  body?: string | string[];
+  body?: any;
   mainImage: string;
   categories: {
     title: string

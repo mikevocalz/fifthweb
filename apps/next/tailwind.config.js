@@ -6,9 +6,16 @@ module.exports = {
     './pages/**/*.{js,jsx,ts,tsx}',
     '../../packages/app/**/*.{js,jsx,ts,tsx}',
   ],
-  plugins: [require('nativewind/tailwind/css')],
+  plugins: [
+    require('nativewind/tailwind/css'),
+    require('@tailwindcss/typography'),
+    require('tailwind-scrollbar')({ nocompatible: true }),
+  ],
   important: 'html',
   theme: {
     ...theme,
+  },
+  variants: {
+    scrollbar: ['rounded'],
   },
 }

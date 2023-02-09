@@ -10,7 +10,10 @@ import {
 } from '@expo/html-elements';
 import { MotiPressable as RNMotiPressable } from 'moti/interactions';
 import { TextLink as RNLink } from 'solito/link';
+// @ts-ignore  
+import { PortableText as RNPortableText } from '@portabletext/react-native'
 
+export const PortableText = styled(RNPortableText)
 export const Link = styled(RNLink)
 export const Row = styled(View, "flex-row")
 export const MotiPressable = styled(RNMotiPressable)

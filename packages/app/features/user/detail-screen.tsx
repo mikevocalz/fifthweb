@@ -3,15 +3,12 @@ import { createParam } from 'solito'
 import { useLayoutEffect } from 'react'
 import { useNavigation, } from "expo-router";
 import { Text, TextLink } from 'app/design/typography'
-import { Image, Row, ScrollView, } from 'app/design/layout'
+import { Article, H1, Image, Row, ScrollView, Span, LI, UL } from 'app/design/layout'
 import { View } from 'app/design/view'
 import { Dimensions, Platform } from 'react-native'
-// @ts-ignore  
-import { PortableText } from '@portabletext/react-native'
-//import { PortableText } from '@portabletext/react-'
-
 import RichTextComponent from 'app/components/RichTextComponent';
 import { urlFor } from '../../sanity';
+import { PortableText, toPlainText } from '@portabletext/react'
 
 const { useParam } = createParam<{
   id: string,
@@ -21,37 +18,39 @@ const { useParam } = createParam<{
   author: any,
   authorImgSrc: string,
   item: any,
-  imgSrc: string
+  imgSrc: string,
+  date: string | any
 }>()
 
 
 interface Props {
   navigation: (val: string) => void;
   route: string | string[];
+  item: any
 }
 
 const isWeb = Platform.OS === "web"
 
 export function UserDetailScreen({ navigation }: Props) {
 
-  //const { title, imgSrc, date, authorImgSrc, _id, } = route.params
+  //const { categories } = item
 
   const [id] = useParam('id');
   const [body, setBody] = useParam('body')
-  const [categories] = useParam('categories')
+  //const [categories] = useParam('categories')
   const [title] = useParam('title')
   const [author] = useParam('author')
-  const [item] = useParam('item')
+  //const [item] = useParam('item')
   const [authorImgSrc] = useParam('authorImgSrc')
   const [imgSrc] = useParam('imgSrc')
+  const [date] = useParam('date')
 
 
   const screenHeight = Dimensions.get('window').height
   const screenWidth = Dimensions.get('window').width
 
 
-
-  console.log('Here i Am:', JSON.stringify(item))
+  console.log('Here Cat:', item.body)
 
 
   if (!isWeb) {
@@ -70,17 +69,23 @@ export function UserDetailScreen({ navigation }: Props) {
 
 
   //console.log("routes:", JSON.stringify(route.params.categories))
-  console.log('Params:', authorImgSrc)
+  //console.log('Params:', authorImgSrc)
 
 
   return (
-    <ScrollView className="bg-zinc-900 flex-1 p-3"
+    <ScrollView className="flex-1 container bg-zinc-900 p-3  whitespace-nowrap overflow-auto scrollbar-hide "
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
       contentContainerStyle={{
         width: '100%',
-        height: '100%',
-        maxHeight: screenHeight,
+        height: '100vh',
+        minHeight: isWeb ? '100vh' : '100%',
         paddingTop: isWeb ? 50 : 20,
-        alignItems: 'center'
+        paddingBottom: 400,
+        alignItems: 'center',
+        flexGrow: 1,
+        position: 'relative',
+
       }}>
 
 
@@ -90,28 +95,43 @@ export function UserDetailScreen({ navigation }: Props) {
 
 
       <Image
-        className='object-cover object-left aspect-video w-[80vw]  max-w-6xl '
+        className='object-cover object-center aspect-video w-full max-w-6xl rounded-3xl'
         source={
           {
             uri: imgSrc
           }
         }
         resizeMode='cover'
-      //alt="blog image" 
+        alt="blog image"
       />
 
-      <Row className='container flex-row  items-center h-10 my-6 space-x-4'>
-        <Text className='text-center  font-bold text-white text-lg'>{author}</Text>
-        <Image
-          className=" object-fit object-center h-10 w-10 rounded-lg "
-          source={
-            {
-              uri: authorImgSrc
+      <Row className='continer flex-row items-center h-10 my-6 justify-between w-[90%]  justify-center'>
+        <Row className='relative flex-row items-center space-x-4 '>
+          <Text className='text-center  font-bold text-white text-lg'>{author}</Text>
+          <Image
+            className=" object-fit object-center h-10 w-10 rounded-lg "
+            source={
+              {
+                uri: authorImgSrc
+              }
             }
-          }
-          alt="user image" />
+            alt="user image" />
+        </Row>
+        <View>
+          <Text className='text-center  font-bold text-white text-lg'>
+            {new Date(date).toLocaleDateString(
+              "en-US", {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric'
+            }
+            )}</Text>
+        </View>
       </Row>
 
+      {/* <Text
+        className='text-left mb-5 font-bold text-white text-xl'
+      >{body}</Text> */}
 
       {/* <Text className="text-center mb-2 font-regular text-[16px] text-white flex-wrap">{body}</Text> */}
 
@@ -129,17 +149,30 @@ export function UserDetailScreen({ navigation }: Props) {
       </Row> */}
 
 
+      {/* {categories || categories <= 0 ?
+        <Row className='space-x-2 items-center'>
+          {categories.map((category, i) => (
+            <View key={i} className='bg-white rounded-3xl w-20 h-6 justify-center mr-4'>
+              <Text className='py-1 px-4 text-md font-bold text-black text-center'>{category.title}</Text>
+            </View>
+          ))}
+        </Row>
+        : null
+      } */}
 
 
-      <PortableText
-        value={body}
-        components={RichTextComponent}
-      // onMissingComponent={(message, options) => {
-      //   <Text>{message}</Text>
-      // }}
-      />
+      <View className='container h-[100%] max-w-6xl z-10 rounded-xl'>
+        <PortableText
+          value={
+            item?.body
+          }
+        //components={RichTextComponent}
+        />
+      </View>
+
+
 
       <TextLink href="/">👈 Go Home</TextLink>
-    </ScrollView>
+    </ScrollView >
   )
 }

@@ -129,14 +129,14 @@ export function WebLayout({ children }: { children: ReactNode }) {
             </View>
           </View>
         </View>
+        <View className="flex items-center h-full bg-zinc-900 mt-0 text-white overflow-hidden">
 
-        <View className="flex items-center min-h-screen bg-zinc-900 mt-0 text-white">
           {children}
-
 
 
         </View>
         <FooterComponent />
+
       </StacksProvider>
     </>
   )

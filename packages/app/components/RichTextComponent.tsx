@@ -4,18 +4,38 @@ import { urlFor } from '../sanity'
 import { TextLink } from 'solito/link'
 import { Text } from "app/design/typography"
 
+import { } from "@expo/html-elements"
+import { PortableTextComponents } from '@portabletext/react'
 
 
-const RichTextComponent = {
+const RichTextComponent: PortableTextComponents = {
   types: {
-    image: ({ val }: any) => {
+    mainImage: ({ value }: any) => {
+      return (<View className="w-full flex-1 h-[300px] w-full bg-red-600">
+        <Image
+          resizeMode='cover'
+          style={{
+            flex: 1,
+            width: '100%',
+            height: 400
+          }}
+          source={{
+            uri: value
+
+          }}
+          alt={'main oic'}
+        />
+      </View>
+      )
+    },
+    image: ({ value }: any) => {
       return (
-        <View>
+        <View className='w-full h-[300px] flex-1 bg-red-800'  >
           <Image
             className="flex-1 object-contain object-left aspect-video	 w-[100%]   h-full md:h-[100%] md:w-48 lg:object-center "
-            source={val}
+            source={value}
             alt="blog image" />
-        </View>
+        </View >
       );
     },
     video: ({ value }) => {
@@ -25,39 +45,39 @@ const RichTextComponent = {
   },
   list: {
     bullet: ({ children }: any) => (
-      <UL className="ml-10 py-5 list-disc space-y-5">{children}</UL>
+      <UL className="ml-10 py-5 list-disc space-y-5 text-white">{children}</UL>
     ),
     number: ({ children }: any) => (
-      <LI className="mt-lg list-decimal">{children}</LI>
+      <LI className="mt-lg list-decimal text-white">{children}</LI>
     ),
   },
   block: {
     h1: ({ children }: any) => (
-      <H1 className="py-10 font-bold">{children}</H1>
+      <H1 className="py-10 font-bold text-white">{children}</H1>
     ),
     h2: ({ children }: any) => (
-      <H2 className="py-10 font-bold">{children}</H2>
+      <H2 className="py-10 font-bold text-white">{children}</H2>
     ),
     h3: ({ children }: any) => (
-      <H3 className="py-10 font-bold">{children}</H3>
+      <H3 className="py-10 font-bold text-white">{children}</H3>
     ),
     h4: ({ children }: any) => (
-      <H4 className="py-10 font-bold">{children}</H4>
+      <H4 className="py-10 font-bold text-white">{children}</H4>
     ),
     h5: ({ children }: any) => (
-      <H5 className="py-10 font-bold">{children}</H5>
+      <H5 className="py-10 font-bold text-white">{children}</H5>
     ),
     blockqoute: ({ children }: any) => (
-      <BlockQuote className="border-l-white border-l-4 pl-5 py-5 my-5">{children}</BlockQuote>
+      <BlockQuote className="border-l-white border-l-4 pl-5 py-5 my-5 text-white">{children}</BlockQuote>
     ),
   },
   marks: {
-    links: ({ children, val }: any) => {
-      const rel = !val.href.startsWith("/") ? "noreferrer noopener" : undefined;
+    links: ({ children, value }: any) => {
+      const rel = !value.href.startsWith("/") ? "noreferrer noopener" : undefined;
 
       return (
-        <TextLink href={val.href} rel={rel}
-          className='underline decoration-white hover:decoration-black'>
+        <TextLink href={value.href} rel={rel}
+          className='underline decoration-white hover:decoration-black text-white'>
           <Text>{children}</Text>
         </TextLink>
       );

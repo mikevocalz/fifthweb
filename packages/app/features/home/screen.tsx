@@ -15,21 +15,27 @@ import { BlogItem } from 'app/components/BlogItem'
 import { useRouter } from 'solito/router'
 import usePostStore from '../../store/store';
 import { Post } from '../../../../apps/expo/types'
+import slugify from 'slugify'
+
+import { toPlainText } from '@portabletext/react-native'
 
 
 const query = `
 *[_type == "post"]{
 ...,
+  _id,
    title,
      body,
-  slug,
+   "slug": slug.current,
      description,
      mainImage,
   author->{
     name,
     image
   },
-    categories[]->
+    categories[]->{
+      title
+    }
 } | order(_createdAt desc)
 `
 
@@ -59,21 +65,33 @@ export function HomeScreen({ navigation }) {
   //     })
   // }
 
+  const { posts, fetch } = usePostStore((state) => state)
+
   useEffect(() => {
     //getPosts()
-    fetch()
+    //fetch()
     setLoading(false)
   }, []);
 
-  const { posts, fetch } = usePostStore((state) => state)
 
   console.log('im posts:', posts)
 
   // item.posts[0]?.body[0]?.children[0]?.text
 
   const goToPostDetails = (item) => {
-    const slug = item.slug.current
-    //console.log('im item:', slug)
+    const slug = slugify(item.slug.current,
+      {
+        replacement: '-',
+        strict: true,     // strip special characters except replacement, defaults to `false`
+        trim: true
+      }
+    )  // some_string
+
+    const categ = item.categories
+    let cats = categ.map((item) => item);
+
+
+    console.log('im cats:', cats)
     const body = item.body[0]?.children[0]?.text
     // const auImg = urlFor(item.author?.image?.asset)?.auto('format').toString();
     //const imgMain = urlFor(item.mainImage?.asset)?.auto('format').toString();
@@ -81,18 +99,21 @@ export function HomeScreen({ navigation }) {
       pathname: `/user/${slug}`,
       query: {
         ...item,
-        id: item.title,
+        slug,
+        id: item._id,
         author: item.author?.name,
         authorImgSrc: urlFor(item.author?.image?.asset)?.auto('format').toString(),
-        categories: item.categories,
+        categories: cats,
         item: item,
         title: item.title,
-        body: item.body[0]?.children[0]?.text,
+        body: toPlainText(item.body),
         date: item._createdAt,
         imgSrc: urlFor(item.mainImage?.asset)?.auto('format').toString()
       }
     })
   }
+
+
   const renderItem = ({ item }) => (
     <>
       {
@@ -121,6 +142,7 @@ export function HomeScreen({ navigation }) {
         <Article>
           <FlatList
             showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
             data={posts}
             renderItem={(item) => renderItem(item)}
             keyExtractor={({ item }, i) => i.toString()}
@@ -132,7 +154,7 @@ export function HomeScreen({ navigation }) {
               position: 'relative',
               paddingTop: isWeb ? 100 : 20,
               paddingBottom: 100,
-              alignItems: 'center',
+              alignItems: 'center'
             }}
             className="container p-4 self-center text-white bg-zinc-900 max-w-7xl "
             extraData={posts}
@@ -143,3 +165,6 @@ export function HomeScreen({ navigation }) {
     </View>
   )
 }
+
+
+export default HomeScreen

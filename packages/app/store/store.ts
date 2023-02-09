@@ -3,8 +3,8 @@ import { devtools, persist } from 'zustand/middleware'
 import sanityClient from '../sanity'
 
 interface StoreState {
-  posts: string[]
-  fetch: () => void
+  posts: string[] | any
+  fetch: (val: any) => void
 }
 
 const query = `

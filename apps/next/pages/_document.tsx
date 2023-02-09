@@ -86,7 +86,7 @@ class Document extends NextDocument {
             />
           ))}
         </Head>
-        <body>
+        <body className='overflow-y-scroll overflow-auto scrollbar-thin scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thumb-[#662D91] scrollbar-track-black/25'>
           <Main />
           <NextScript />
         </body>
